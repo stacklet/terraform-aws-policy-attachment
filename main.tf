@@ -1,6 +1,6 @@
 resource "aws_s3_bucket_policy" "this" {
-  count  = var.resource_type == "aws_s3_bucket" ? 1 : 0
-  bucket = var.resource_id
+  count  = startswith(var.resource_arn, "arn:aws:s3:") ? 1 : 0
+  bucket = var.resource_arn
 
   policy = jsonencode({
     Version   = lookup(local.policy, "Version", null),
@@ -9,7 +9,7 @@ resource "aws_s3_bucket_policy" "this" {
       merge(
         statement,
         {
-          Resource = "${var.resource_id}/*"
+          Resource = "${var.resource_arn}/*"
         }
       )
     ]
@@ -17,8 +17,8 @@ resource "aws_s3_bucket_policy" "this" {
 }
 
 resource "aws_secretsmanager_secret_policy" "this" {
-  count     = var.resource_type == "aws_secretsmanager_secret" ? 1 : 0
-  secret_arn = var.resource_id
+  count      = startswith(var.resource_arn, "arn:aws:secretsmanager:") ? 1 : 0
+  secret_arn = var.resource_arn
 
   policy = jsonencode({
     Version   = lookup(local.policy, "Version", null),
@@ -27,7 +27,7 @@ resource "aws_secretsmanager_secret_policy" "this" {
       merge(
         statement,
         {
-          Resource = var.resource_id
+          Resource = var.resource_arn
         }
       )
     ]

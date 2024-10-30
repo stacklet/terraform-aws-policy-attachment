@@ -5,8 +5,8 @@
 ```hcl
 module "secretmanager_policy" {
   source = "github.com/stacklet/terraform-aws-policy-attachment"
-  resource_type = "aws_secretsmanager_secret"
-  resource_id   = aws_secretsmanager_secret.example.arn
+
+  resource_arn = aws_secretsmanager_secret.example.arn
   policy = <<POLICY
   {
       "Version": "2012-10-17",
