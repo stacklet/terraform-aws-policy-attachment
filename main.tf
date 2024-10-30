@@ -1,6 +1,10 @@
+data "aws_arn" "this" {
+  arn = "arn:aws:rds:eu-west-1:123456789012:db:mysql-db"
+}
+
 resource "aws_s3_bucket_policy" "this" {
-  count  = startswith(var.resource_arn, "arn:aws:s3:") ? 1 : 0
-  bucket = var.resource_arn
+  count  = aws_arn.this.service == "s3" ? 1 : 0
+  bucket = aws_arn.this.resource
 
   policy = jsonencode({
     Version   = lookup(local.policy, "Version", null),
@@ -17,7 +21,7 @@ resource "aws_s3_bucket_policy" "this" {
 }
 
 resource "aws_secretsmanager_secret_policy" "this" {
-  count      = startswith(var.resource_arn, "arn:aws:secretsmanager:") ? 1 : 0
+  count      = aws_arn.this.service == "secretsmanager" ? 1 : 0
   secret_arn = var.resource_arn
 
   policy = jsonencode({
