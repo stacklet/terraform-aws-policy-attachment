@@ -1,5 +1,5 @@
 data "aws_arn" "this" {
-  arn = "arn:aws:rds:eu-west-1:123456789012:db:mysql-db"
+  arn = var.resource_arn
 }
 
 resource "aws_s3_bucket_policy" "this" {
