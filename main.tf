@@ -17,7 +17,7 @@ resource "aws_s3_bucket_policy" "this" {
 }
 
 resource "aws_secretsmanager_secret_policy" "this" {
-  count     = var.resource_type == "aws_secrets_manager_secret" ? 1 : 0
+  count     = var.resource_type == "aws_secretsmanager_secret" ? 1 : 0
   secret_arn = var.resource_id
 
   policy = jsonencode({
